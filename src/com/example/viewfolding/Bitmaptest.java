@@ -3,6 +3,7 @@ package com.example.viewfolding;
 import android.app.Activity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Camera;
 import android.graphics.Matrix;
 import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
@@ -12,41 +13,29 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class Bitmaptest extends Activity {
+	private static final int MODE_TO_RIGHT = 0;
+	private static final int MODE_TO_LEFT = 1;
+	
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
         LinearLayout linLayout = new LinearLayout(this);
 
         // load the origial BitMap (500 x 500 px)
-        Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(),R.drawable.ic_launcher);
+        Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(),R.drawable.rio);
 
-        int width = bitmapOrg.getWidth();
-        int height = bitmapOrg.getHeight();
-        int newWidth = 400;
-        int newHeight = 400;
-
-        // calculate the scale - in this case = 0.4f
-        float scaleWidth = ((float) newWidth) / width;
-        float scaleHeight = ((float) newHeight) / height;
-
-        // createa matrix for the manipulation
-        Matrix matrix = new Matrix();
-        // resize the bit map
-        matrix.postScale(scaleWidth, scaleHeight);
-        // rotate the Bitmap
-        matrix.postRotate(45);
-
-        // recreate the new Bitmap
-        Bitmap resizedBitmap = Bitmap.createBitmap(bitmapOrg, 0, 0, width, height, matrix, true);
-
-        // make a Drawable from Bitmap to allow to set the BitMap
-        // to the ImageView, ImageButton or what ever
-        BitmapDrawable bmd = new BitmapDrawable(resizedBitmap);
-
+        final Matrix matrix2 = getMatrix(bitmapOrg.getHeight(), MODE_TO_RIGHT);
+        
+        Bitmap bitmapT = Bitmap.createBitmap(bitmapOrg, 0, 0, bitmapOrg.getWidth(), bitmapOrg.getHeight(), matrix2, true);
+        bitmapOrg.recycle();
+        
+        /**
+         * DISPLAY 
+         */
         ImageView imageView = new ImageView(this);
-
+        
         // set the Drawable on the ImageView
-        imageView.setImageDrawable(bmd);
+        imageView.setImageDrawable(new BitmapDrawable(bitmapT));
 
         // center the Image
         imageView.setScaleType(ScaleType.CENTER);
@@ -61,4 +50,22 @@ public class Bitmaptest extends Activity {
         // set LinearLayout as ContentView
         setContentView(linLayout);
     }
+
+	private Matrix getMatrix(final float centerY, final int mode) {
+		Camera camera = new Camera();
+		final Matrix matrix = new Matrix();
+        camera.save();
+//        if (mode == MODE_TO_RIGHT) {
+//        	camera.rotateY(135);
+//		} else if (mode == MODE_TO_LEFT) {
+			camera.rotateY(45);
+//		}
+        camera.getMatrix(matrix);
+        camera.restore();
+        matrix.preTranslate(0, -centerY/2);
+        if (mode == MODE_TO_RIGHT) {
+        	matrix.postScale(-1.0f, 1.0f);
+        }
+		return matrix;
+	}
 }
