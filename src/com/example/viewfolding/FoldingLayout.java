@@ -20,10 +20,11 @@ public class FoldingLayout extends FrameLayout {
 	private static final int MODE_TO_COUNTER_CLOCK = 0;
 	private static final int MODE_TO_CLOCK = 1;
 	private static final int FOLDS_SIZE = 100;
-	
+	private static final float DEPTH_Z = 310.0f;
+		
+
 	private int nbFolds = 2;
 	
-	private static final float DEPTH8Z = 310.0f;
 	
 	private Paint mPaint;
 	private Bitmap mBitmap;
@@ -159,16 +160,23 @@ public class FoldingLayout extends FrameLayout {
         Camera camera = new Camera();
 		final Matrix matrix = new Matrix();
         camera.save();
+        float folding_move = 0;
         if (mode == MODE_TO_COUNTER_CLOCK) {
         	camera.rotateY(-45);
 		} else if (mode == MODE_TO_CLOCK) {
 			camera.rotateY(45);
 		}
+//    	folding_move = (float) (mBitmap.getWidth()/nbFolds*Math.cos(45d)*(position-1));
+    	
         camera.getMatrix(matrix);
         camera.restore();
-        matrix.preTranslate(0, -centerY/2);;
-        matrix.postTranslate(position==0?0:mBitmap.getWidth()/nbFolds*position, 0);
+        if (mode == MODE_TO_COUNTER_CLOCK) {
+        	matrix.preTranslate(mBitmap.getWidth()/nbFolds, -centerY/2);
+        }
+        matrix.postTranslate(position==0?0:mBitmap.getWidth()/nbFolds*position - folding_move, 0);
         
+        Log.d(this.getClass().getName(), "contant_counter : " + folding_move);
+        Log.d(this.getClass().getName(), "translate : " + (position==0?0:mBitmap.getWidth()/nbFolds*position - folding_move));
 		return matrix;
 	}
 }

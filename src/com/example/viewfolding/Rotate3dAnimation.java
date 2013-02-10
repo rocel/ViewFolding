@@ -2,6 +2,7 @@ package com.example.viewfolding;
 
 import android.graphics.Camera;
 import android.graphics.Matrix;
+import android.util.Log;
 import android.view.animation.Animation;
 import android.view.animation.Transformation;
 
@@ -68,12 +69,13 @@ public class Rotate3dAnimation extends Animation {
         final Matrix matrix = t.getMatrix();
 
         camera.save();
-        if (mReverse) {
-            camera.translate(0.0f, 0.0f, mDepthZ * interpolatedTime);
-        } else {
-            camera.translate(0.0f, 0.0f, mDepthZ * (1.0f - interpolatedTime));
-        }
+//        if (mReverse) {
+//            camera.translate(0.0f, 0.0f, mDepthZ * interpolatedTime);
+//        } else {
+//            camera.translate(0.0f, 0.0f, mDepthZ * (1.0f - interpolatedTime));
+//        }
         camera.rotateY(degrees);
+        Log.d(this.getClass().getName(), "degrees = " + degrees );
         camera.getMatrix(matrix);
         camera.restore();
 

@@ -60,10 +60,10 @@ public class MainActivityAnimated extends Activity {
 			public void onClick(View v) {
 //				foldWithAnimation();
 				if (STATE_FOLDED){
-					foldWithControledAnimation(left, MODE_UNFOLD, imgvL,LEFT);
+//					foldWithControledAnimation(left, MODE_UNFOLD, imgvL,LEFT);
 					foldWithControledAnimation(right, MODE_UNFOLD, imgvR,RIGHT);
 				} else {
-					foldWithControledAnimation(left, MODE_FOLD, imgvL,LEFT);
+//					foldWithControledAnimation(left, MODE_FOLD, imgvL,LEFT);
 					foldWithControledAnimation(right, MODE_FOLD, imgvR,RIGHT);
 				}
 				STATE_FOLDED = !STATE_FOLDED;
