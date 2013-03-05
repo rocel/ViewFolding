@@ -13,8 +13,8 @@ import android.widget.LinearLayout;
 import android.widget.LinearLayout.LayoutParams;
 
 public class Bitmaptest extends Activity {
-	private static final int MODE_TO_RIGHT = 0;
-	private static final int MODE_TO_LEFT = 1;
+	private static final int MODE_COUNTER_CLOCK = 0;
+	private static final int MODE_CLOCK = 1;
 	
     @Override
     public void onCreate(Bundle icicle) {
@@ -24,7 +24,7 @@ public class Bitmaptest extends Activity {
         // load the origial BitMap (500 x 500 px)
         Bitmap bitmapOrg = BitmapFactory.decodeResource(getResources(),R.drawable.rio);
 
-        final Matrix matrix2 = getMatrix(bitmapOrg.getHeight(), MODE_TO_RIGHT);
+        final Matrix matrix2 = getMatrix(bitmapOrg.getHeight(), MODE_COUNTER_CLOCK);
         
         Bitmap bitmapT = Bitmap.createBitmap(bitmapOrg, 0, 0, bitmapOrg.getWidth(), bitmapOrg.getHeight(), matrix2, true);
         bitmapOrg.recycle();
@@ -55,16 +55,17 @@ public class Bitmaptest extends Activity {
 		Camera camera = new Camera();
 		final Matrix matrix = new Matrix();
         camera.save();
-//        if (mode == MODE_TO_RIGHT) {
-//        	camera.rotateY(135);
-//		} else if (mode == MODE_TO_LEFT) {
+        if (mode == MODE_COUNTER_CLOCK) {
+        	camera.rotateY(-45);
+		} else if (mode == MODE_CLOCK) {
 			camera.rotateY(45);
-//		}
+		}
         camera.getMatrix(matrix);
         camera.restore();
         matrix.preTranslate(0, -centerY/2);
-        if (mode == MODE_TO_RIGHT) {
-        	matrix.postScale(-1.0f, 1.0f);
+        if (mode == MODE_COUNTER_CLOCK) {
+//        	matrix.preScale(-1.0f, 1.0f);
+//        	matrix.postScale(-1.0f, 1.0f);
         }
 		return matrix;
 	}

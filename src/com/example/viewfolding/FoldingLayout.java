@@ -10,6 +10,7 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Matrix;
 import android.graphics.Paint;
+import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.View;
@@ -20,11 +21,10 @@ public class FoldingLayout extends FrameLayout {
 	private static final int MODE_TO_COUNTER_CLOCK = 0;
 	private static final int MODE_TO_CLOCK = 1;
 	private static final int FOLDS_SIZE = 100;
-	private static final float DEPTH_Z = 310.0f;
-		
-
+	
 	private int nbFolds = 2;
 	
+	private static final float DEPTH8Z = 310.0f;
 	
 	private Paint mPaint;
 	private Bitmap mBitmap;
@@ -47,19 +47,21 @@ public class FoldingLayout extends FrameLayout {
 				getViewTreeObserver().removeGlobalOnLayoutListener(this);
 				mBitmap = FoldingLayout.this.getDrawingCache();
 				View v = getChildAt(0);
-				nbFolds = mBitmap.getWidth()/FOLDS_SIZE;
+//				nbFolds = mBitmap.getWidth()/FOLDS_SIZE;
+				nbFolds = 10;
 				Log.d(this.getClass().getName(),"nbFolds = " + nbFolds);
 				for(int i = 0; i < nbFolds ; i++){
 //					Log.d(this.getClass().getName(), i + " -> x : " + (i==0?0:mBitmap.getWidth()/nbFolds*i));
 //					Log.d(this.getClass().getName(), i + " -> width : " + (mBitmap.getWidth()/nbFolds));
 					
 					Bitmap nbitmap = Bitmap.createBitmap(mBitmap,
-							(i==0?0:mBitmap.getWidth()/nbFolds*i),
+							(mBitmap.getWidth()/nbFolds)*i,
 							0,
 							mBitmap.getWidth()/nbFolds,
 							mBitmap.getHeight());
 					if(i%2==0){
-						mBitmaps.add(doBrightness(nbitmap,-90));
+						mBitmaps.add(nbitmap);
+//						mBitmaps.add(doBrightness(nbitmap,-90));
 					} else {
 						mBitmaps.add(nbitmap);
 					}
@@ -124,7 +126,7 @@ public class FoldingLayout extends FrameLayout {
 			System.out.println("-------------------- DRAWING !!!!");
 			getChildAt(0).setVisibility(View.GONE);
 			for( int i = 0 ; i<nbFolds ;i++ ){
-				if(i%2==0){
+				if (i % 2 == 0){
 					canvas.drawBitmap(mBitmaps.get(i),getMatrix(0, MODE_TO_CLOCK,i), null);
 				} else {
 					canvas.drawBitmap(mBitmaps.get(i),getMatrix(0, MODE_TO_COUNTER_CLOCK,i), null);
@@ -135,6 +137,35 @@ public class FoldingLayout extends FrameLayout {
 				getChildAt(i).setVisibility(View.VISIBLE);
 			}
 		}
+	}
+
+	private Matrix getMatrix(final float centerY, final int mode,final int position) {
+		int degree = 45;
+        Camera camera = new Camera();
+		final Matrix matrix = new Matrix();
+        camera.save();
+        if (mode == MODE_TO_COUNTER_CLOCK) {
+        	camera.rotateY(-degree);
+		} else if (mode == MODE_TO_CLOCK) {
+			camera.rotateY(degree);
+		}
+        camera.getMatrix(matrix);
+//        matrix.preTranslate(0, -centerY/2);
+        // if translation from LEFT TO RIGHT other wise + Math.cos(degree)*mBitmap.getWidth()
+//        int perspective  = (int) (Math.cos(degree)*mBitmap.getWidth()/nbFolds * position);
+        int perspective  = 0;
+        float move = (float) ((mBitmap.getWidth()/nbFolds)*position - perspective);
+        Log.d("MOVE", position + " W --> " + mBitmap.getWidth()/nbFolds);
+        Log.d("MOVE", position + " M --> " + move);
+        Log.d("MOVE", position + " P --> " + perspective);
+        Log.d("MOVE","------------------------");
+        matrix.postTranslate(
+        		move,
+        		0);
+
+        camera.restore();
+        
+		return matrix;
 	}
 	
 	@Override
@@ -155,28 +186,12 @@ public class FoldingLayout extends FrameLayout {
 			this.setMeasuredDimension(mBitmap.getWidth(), mBitmap.getHeight());
 		}
 	}
-
-	private Matrix getMatrix(final float centerY, final int mode,final int position) {
-        Camera camera = new Camera();
-		final Matrix matrix = new Matrix();
-        camera.save();
-        float folding_move = 0;
-        if (mode == MODE_TO_COUNTER_CLOCK) {
-        	camera.rotateY(-45);
-		} else if (mode == MODE_TO_CLOCK) {
-			camera.rotateY(45);
-		}
-//    	folding_move = (float) (mBitmap.getWidth()/nbFolds*Math.cos(45d)*(position-1));
-    	
-        camera.getMatrix(matrix);
-        camera.restore();
-        if (mode == MODE_TO_COUNTER_CLOCK) {
-        	matrix.preTranslate(mBitmap.getWidth()/nbFolds, -centerY/2);
-        }
-        matrix.postTranslate(position==0?0:mBitmap.getWidth()/nbFolds*position - folding_move, 0);
-        
-        Log.d(this.getClass().getName(), "contant_counter : " + folding_move);
-        Log.d(this.getClass().getName(), "translate : " + (position==0?0:mBitmap.getWidth()/nbFolds*position - folding_move));
-		return matrix;
+	
+	
+	//IMPORTANT ?
+	@Override
+	protected boolean verifyDrawable(Drawable who) {
+		return true;
 	}
+
 }

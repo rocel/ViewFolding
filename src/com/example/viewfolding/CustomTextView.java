@@ -18,21 +18,21 @@ public class CustomTextView extends TouchView {
 	public CustomTextView(Context context) {
 		super(context);
 		
-		imgvL = (ImageView) findViewById(R.id.imageviewL);
-		imgvR = (ImageView) findViewById(R.id.imageviewR);
-		
-		txtv = (TextView) findViewById(R.id.textview);
-		txtv.setDrawingCacheEnabled(true);
-		txtv.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
-			@Override
-			public void onGlobalLayout() {
-				Bitmap bitmap = txtv.getDrawingCache();
-				left = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()/2, bitmap.getHeight());
-				right = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2, 0, bitmap.getWidth()/2, bitmap.getHeight());
-				imgvL.setBackgroundDrawable(new BitmapDrawable(left));
-				imgvR.setBackgroundDrawable(new BitmapDrawable(right));
-			}
-		});
+//		imgvL = (ImageView) findViewById(R.id.imageviewL);
+//		imgvR = (ImageView) findViewById(R.id.imageviewR);
+//		
+//		txtv = (TextView) findViewById(R.id.textview);
+//		txtv.setDrawingCacheEnabled(true);
+//		txtv.getViewTreeObserver().addOnGlobalLayoutListener(new OnGlobalLayoutListener() {
+//			@Override
+//			public void onGlobalLayout() {
+//				Bitmap bitmap = txtv.getDrawingCache();
+//				left = Bitmap.createBitmap(bitmap, 0, 0, bitmap.getWidth()/2, bitmap.getHeight());
+//				right = Bitmap.createBitmap(bitmap, bitmap.getWidth()/2, 0, bitmap.getWidth()/2, bitmap.getHeight());
+//				imgvL.setBackgroundDrawable(new BitmapDrawable(left));
+//				imgvR.setBackgroundDrawable(new BitmapDrawable(right));
+//			}
+//		});
 	}
 
 }

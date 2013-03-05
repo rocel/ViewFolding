@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">ViewFolding</string>
-    <string name="hello_world">Hello world!</string>
+    <string name="app_name">0ViewFolding</string>
+    <string name="hello_world">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vitae felis et leo hendrerit malesuada. Morbi in tellus a neque posuere suscipit. Sed elit est, volutpat sit amet dignissim eu, auctor quis metus. Donec vel libero sed mauris iaculis sollicitudin vel eu risus. Vivamus in nisl id lectus ullamcorper mollis. Quisque viverra augue id metus dignissim sit amet faucibus tellus consequat. Quisque rutrum consequat nulla vitae fermentum. Nullam vel risus ac eros viverra venenatis nec eget orci.</string>
     <string name="menu_settings">Settings</string>
 
 </resources>
