@@ -12,8 +12,12 @@ import android.view.animation.Transformation;
  * improve the effect.
  */
 public class CustomRotate3dAnimation extends Animation {
+	public final static String TAG_END = "ANIMATION_END";
+	
 	public final static int DIRECTION_LEFT = 0;
 	public final static int DIRECTION_RIGHT = 1;
+	
+	public static int GAP_TRICK = 2;
 	
     private final float mFromDegrees;
     private final float mToDegrees;
@@ -24,6 +28,7 @@ public class CustomRotate3dAnimation extends Animation {
     private final int mDirection;
 	private final int mNbFolds;
 	private final int mImageWidth;
+	private final int mWidth;
     
     private Camera mCamera;
 
@@ -58,6 +63,9 @@ public class CustomRotate3dAnimation extends Animation {
         mDirection = direction;
         mNbFolds = nbFolds;
         mImageWidth = imageWidth;
+        mWidth = mImageWidth / mNbFolds;
+        GAP_TRICK = (int) ((Math.cos(toDegrees * Math.PI / 180) * mWidth)); 
+        System.out.println("===================GAP " + GAP_TRICK);
     }
 
     @Override
@@ -82,17 +90,23 @@ public class CustomRotate3dAnimation extends Animation {
         camera.rotateY(degrees);
         camera.getMatrix(matrix);
         camera.restore();
-
-		int decal = (int) (
-			(Math.cos(Math.toRadians(mToDegrees - degrees)) * mImageWidth / mNbFolds * mPosition) - 
-			(Math.cos(Math.toRadians(mToDegrees)) * mImageWidth / mNbFolds)
-		);
-        matrix.preTranslate(-centerX, -centerY);
-        matrix.postTranslate(centerX-decal, centerY);
         
-        if(mPosition==1){
-//        	Log.d(this.getClass().getName(), "degrees = " + degrees );
-            Log.d(this.getClass().getName(), mImageWidth/mNbFolds + "  | decal = " + decal);
+		int decal = (int) (
+				(mWidth - (Math.cos(degrees * Math.PI / 180) * mWidth)) * mPosition
+		) ;
+		
+        matrix.preTranslate(-centerX, -centerY);
+        //TODO: DIRECTION CHECK IS WRONG, pos = 0 SHOULD GO TO RIGHT
+        if(mPosition>1 && mDirection == DIRECTION_LEFT){
+        	matrix.postTranslate(centerX-decal - GAP_TRICK, centerY);
+        } else if(mPosition>1 && mDirection == DIRECTION_RIGHT){
+        	matrix.postTranslate(centerX + decal + GAP_TRICK, centerY);
+        } else {
+        	matrix.postTranslate(centerX, centerY);
+        }
+        
+		if (mPosition == 2) {
+            Log.d(TAG_END,"interpolatedTime =" + interpolatedTime + " | "+  mImageWidth/mNbFolds + "  | decal = " + decal);
         }
     }
 }
