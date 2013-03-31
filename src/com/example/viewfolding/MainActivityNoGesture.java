@@ -50,10 +50,10 @@ public class MainActivityNoGesture extends Activity {
 		LayoutParams params = new LayoutParams(bitmap.getWidth()/NB_CUTS, bitmap.getHeight());
 		
 		int startX = 0;
-		final int width = bitmap.getWidth()/4;
+		final int width = bitmap.getWidth()/4; //*********************************** 4????? or NB_CUTS
 		for(int i = 1; i <= NB_CUTS; i++){
 			if (i > 1) {
-				startX = bitmap.getWidth()*(i-1)/4;
+				startX = bitmap.getWidth()*(i-1)/4; //*********************************** 4????? or NB_CUTS
 			}
 			Log.d(this.getClass().getName(), "startX = " + startX);
 			Bitmap bmp = Bitmap.createBitmap(i%2==0?bitmap:doBrightness(bitmap,-30), startX, 0, width, bitmap.getHeight());
