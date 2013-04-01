@@ -96,6 +96,7 @@ public class CustomRotate3dAnimation extends Animation {
 		) ;
 		
         matrix.preTranslate(-centerX, -centerY);
+        camera.getMatrix(matrix);
         //TODO: DIRECTION CHECK IS WRONG, pos = 0 SHOULD GO TO RIGHT
         if(mPosition>1 && mDirection == DIRECTION_LEFT){
         	matrix.postTranslate(centerX-decal - GAP_TRICK, centerY);
