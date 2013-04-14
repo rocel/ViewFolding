@@ -18,8 +18,9 @@
         android:theme="@style/AppTheme" >
         <activity
             android:name="com.example.viewfolding.surface.DaActivity"
-            android:label="@string/app_name" >
-<!-- touch.TouchActivity -->
+            android:label="@string/app_name"
+            android:screenOrientation="landscape" >
+
             <!-- MainActivityNoGesture -->
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
